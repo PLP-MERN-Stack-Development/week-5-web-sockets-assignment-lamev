@@ -108,6 +108,17 @@ export const useSocket = () => {
       setTypingUsers(users);
     };
 
+    // Error events
+    const onError = (error) => {
+      console.error('Socket error:', error);
+      // You could show a toast notification here
+    };
+
+    const onUsernameTaken = (data) => {
+      console.error('Username taken:', data.message);
+      // You could show a toast notification here
+    };
+
     // Register event listeners
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
@@ -117,6 +128,8 @@ export const useSocket = () => {
     socket.on('user_joined', onUserJoined);
     socket.on('user_left', onUserLeft);
     socket.on('typing_users', onTypingUsers);
+    socket.on('error', onError);
+    socket.on('username_taken', onUsernameTaken);
 
     // Clean up event listeners
     return () => {
@@ -128,6 +141,8 @@ export const useSocket = () => {
       socket.off('user_joined', onUserJoined);
       socket.off('user_left', onUserLeft);
       socket.off('typing_users', onTypingUsers);
+      socket.off('error', onError);
+      socket.off('username_taken', onUsernameTaken);
     };
   }, []);
 
